@@ -32,11 +32,11 @@ end
 
 local function openApp(name)
     if name == "Terminal" then
-        shell.run("/spaceos/apps/terminal.lua")
+        shell.run("/spaceos/apps/terminal_gui.lua")
     elseif name == "Files" then
-        shell.run("/spaceos/apps/files.lua")
+        shell.run("/spaceos/apps/files_gui.lua")
     elseif name == "Settings" then
-        shell.run("/spaceos/apps/settings.lua")
+        shell.run("/spaceos/apps/settings_gui.lua")
     end
 end
 
