@@ -1,7 +1,11 @@
 -- guih.lua: helper functions for Space Inc. GUI OS
 
 -- Create a table to hold all GUI-related functions
-local gui = {}
+local gui, errorMessage = pcall(require, "/spaceos/lib/guih")
+
+if not gui then
+    print("Failed to load GUI library: " .. errorMessage)
+    return
 
 -- Draw a basic button with a label
 function gui.drawButton(x, y, label, width, height, bgColor, textColor)
