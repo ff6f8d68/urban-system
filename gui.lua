@@ -5,7 +5,7 @@ local users = dofile("/spaceos/users.lua")
 
 -- Load GUI library
 local gui = {}
-local success, result = pcall(require, "/spaceos/lib/guih")
+local success, result = pcall(require, "lib/guih")
 
 if not success then
     print("Failed to load GUI library: " .. tostring(result))
