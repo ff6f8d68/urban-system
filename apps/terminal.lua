@@ -1,59 +1,36 @@
-local users = dofile("/spaceos/users.lua")
+-- terminal_gui.lua - GUI Terminal
 
-local function login()
-    term.clear()
-    term.setCursorPos(1, 1)
-    print("== Space Inc. OS Login ==")
-    write("Username: ")
-    local u = read()
-    write("Password: ")
-    local p = read("*")
-    if users[u] == p then
-        return true
-    else
-        print("Access Denied.")
-        sleep(2)
-        os.reboot()
+local gui = require("/spaceos/lib/guih")
+
+local function drawTerminalWindow()
+    gui.drawWindow(2, 2, 30, 15, "Terminal")
+    gui.drawButton(3, 4, "Enter Command", 24, 1, colors.green, colors.white)
+    gui.drawButton(3, 6, "Exit", 24, 1, colors.red, colors.white)
+end
+
+local function runCommand()
+    term.setCursorPos(3, 8)
+    term.setTextColor(colors.white)
+    write("Command: ")
+    local cmd = read()
+    if cmd ~= "" then
+        shell.run(cmd)
     end
 end
 
-local function drawDesktop()
-    term.setBackgroundColor(colors.gray)
-    term.clear()
-    term.setCursorPos(3, 3)
-    term.setBackgroundColor(colors.white)
-    term.setTextColor(colors.black)
-    write(" Terminal ")
-    term.setCursorPos(3, 6)
-    write(" Files ")
-    term.setCursorPos(3, 9)
-    write(" Settings ")
-end
+-- Main
+term.clear()
+term.setCursorPos(1, 1)
+drawTerminalWindow()
 
-local function openApp(name)
-    if name == "Terminal" then
-        shell.run("/spaceos/apps/terminal.lua")
-    elseif name == "Files" then
-        shell.run("/spaceos/apps/files.lua")
-    elseif name == "Settings" then
-        shell.run("/spaceos/apps/settings.lua")
-    end
-end
-
-local function detectClick(x, y)
-    if x >= 3 and x <= 12 then
-        if y == 3 then openApp("Terminal")
-        elseif y == 6 then openApp("Files")
-        elseif y == 9 then openApp("Settings")
+while true do
+    local event, button, x, y = os.pullEvent("mouse_click")
+    if x >= 3 and x <= 26 then
+        if y == 4 then
+            runCommand()
+        elseif y == 6 then
+            return
         end
     end
-end
-
--- Main loop
-login()
-while true do
-    drawDesktop()
-    local e, btn, x, y = os.pullEvent("mouse_click")
-    detectClick(x, y)
 end
 
