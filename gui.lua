@@ -1,40 +1,58 @@
--- main.lua - Space Inc. OS GUI Shell
+-- guih.lua: helper functions for Space Inc. GUI OS
 
-local gui = require("/spaceos/lib/guih")
+-- Create a table to hold all GUI-related functions
+local gui = {}
 
-local function drawMainWindow()
-    term.clear()
-    gui.drawWindow(2, 2, 30, 15, "Space Inc. OS v1.0.4")
-
-    -- Draw buttons for launching apps
-    gui.drawButton(3, 4, "File Manager", 24, 1, colors.blue, colors.white)
-    gui.drawButton(3, 6, "Terminal", 24, 1, colors.green, colors.white)
-    gui.drawButton(3, 8, "Settings", 24, 1, colors.yellow, colors.white)
+-- Draw a basic button with a label
+function gui.drawButton(x, y, label, width, height, bgColor, textColor)
+    term.setBackgroundColor(bgColor or colors.blue)
+    term.setTextColor(textColor or colors.white)
+    term.setCursorPos(x, y)
+    term.write(string.rep(" ", width))
+    term.setCursorPos(x + math.floor((width - #label) / 2), y + math.floor(height / 2))
+    term.write(label)
 end
 
-local function openApp(name)
-    if name == "File Manager" then
-        shell.run("/spaceos/apps/files_gui.lua")
-    elseif name == "Terminal" then
-        shell.run("/spaceos/apps/terminal_gui.lua")
-    elseif name == "Settings" then
-        shell.run("/spaceos/apps/settings_gui.lua")
+-- Create a simple window with title
+function gui.drawWindow(x, y, width, height, title)
+    -- Window border
+    term.setBackgroundColor(colors.gray)
+    for i = y, y + height do
+        term.setCursorPos(x, i)
+        term.write(" ")
+        term.setCursorPos(x + width, i)
+        term.write(" ")
+    end
+    for i = x, x + width do
+        term.setCursorPos(i, y)
+        term.write(" ")
+        term.setCursorPos(i, y + height)
+        term.write(" ")
+    end
+
+    -- Title bar
+    term.setCursorPos(x + math.floor((width - #title) / 2), y)
+    term.setBackgroundColor(colors.lightGray)
+    term.setTextColor(colors.black)
+    term.write(title)
+
+    -- Inside window
+    term.setBackgroundColor(colors.white)
+    for i = y + 1, y + height - 1 do
+        term.setCursorPos(x + 1, i)
+        term.write(string.rep(" ", width - 2))
     end
 end
 
--- Main loop
-drawMainWindow()
-
-while true do
-    local event, button, x, y = os.pullEvent("mouse_click")
-    if x >= 3 and x <= 26 then
-        if y == 4 then
-            openApp("File Manager")
-        elseif y == 6 then
-            openApp("Terminal")
-        elseif y == 8 then
-            openApp("Settings")
+-- Wait for a mouse click within the window
+function gui.waitForButtonClick(x, y, width, height)
+    while true do
+        local event, button, mouseX, mouseY = os.pullEvent("mouse_click")
+        if mouseX >= x and mouseX <= (x + width) and mouseY >= y and mouseY <= (y + height) then
+            return true
         end
     end
 end
 
+-- Return the table so it can be used in main.lua
+return gui
