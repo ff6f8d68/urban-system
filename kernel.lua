@@ -1,4 +1,3 @@
-
 -- kernel.lua - Space Inc. OS System Kernel
 -- Provides core system functionalities like command execution, library management, and factory reset.
 
