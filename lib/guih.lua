@@ -12,15 +12,33 @@ end
 
 -- Create a simple window with title
 function drawWindow(x, y, width, height, title)
-    term.setBackgroundColor(colors.lightGray)
-    term.clear()
-    term.setCursorPos(x, y)
+    -- Window border
     term.setBackgroundColor(colors.gray)
-    term.write(string.rep(" ", width))
-    term.setCursorPos(x + math.floor((width - #title) / 2), y + math.floor(height / 2) - 1)
+    for i = y, y + height do
+        term.setCursorPos(x, i)
+        term.write(" ")
+        term.setCursorPos(x + width, i)
+        term.write(" ")
+    end
+    for i = x, x + width do
+        term.setCursorPos(i, y)
+        term.write(" ")
+        term.setCursorPos(i, y + height)
+        term.write(" ")
+    end
+
+    -- Title bar
+    term.setCursorPos(x + math.floor((width - #title) / 2), y)
+    term.setBackgroundColor(colors.lightGray)
     term.setTextColor(colors.black)
     term.write(title)
-    term.setBackgroundColor(colors.black)
+
+    -- Inside window
+    term.setBackgroundColor(colors.white)
+    for i = y + 1, y + height - 1 do
+        term.setCursorPos(x + 1, i)
+        term.write(string.rep(" ", width - 2))
+    end
 end
 
 -- Wait for a mouse click within the window
@@ -32,4 +50,3 @@ function waitForButtonClick(x, y, width, height)
         end
     end
 end
-
