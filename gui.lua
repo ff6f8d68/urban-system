@@ -8,7 +8,7 @@ if not gui then
     return
 
 -- Draw a basic button with a label
-function gui.drawButton(x, y, label, width, height, bgColor, textColor)
+gui.drawButton(x, y, label, width, height, bgColor, textColor)
     term.setBackgroundColor(bgColor or colors.blue)
     term.setTextColor(textColor or colors.white)
     term.setCursorPos(x, y)
@@ -18,7 +18,7 @@ function gui.drawButton(x, y, label, width, height, bgColor, textColor)
 end
 
 -- Create a simple window with title
-function gui.drawWindow(x, y, width, height, title)
+gui.drawWindow(x, y, width, height, title)
     -- Window border
     term.setBackgroundColor(colors.gray)
     for i = y, y + height do
@@ -49,7 +49,7 @@ function gui.drawWindow(x, y, width, height, title)
 end
 
 -- Wait for a mouse click within the window
-function gui.waitForButtonClick(x, y, width, height)
+gui.waitForButtonClick(x, y, width, height)
     while true do
         local event, button, mouseX, mouseY = os.pullEvent("mouse_click")
         if mouseX >= x and mouseX <= (x + width) and mouseY >= y and mouseY <= (y + height) then
