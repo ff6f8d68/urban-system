@@ -3,23 +3,18 @@
 -- Load required modules
 local users = dofile("/spaceos/users.lua")
 
--- Load GUI library
-local gui = {}
-local success, result = pcall(require, "lib/guih")
-
-if not success then
-    print("Failed to load GUI library: " .. tostring(result))
-    -- Create basic GUI functions if library fails to load
-    function gui.drawButton(x, y, label, width, height, bgColor, textColor)
+-- Create GUI table and functions
+local gui = {
+    drawButton = function(x, y, label, width, height, bgColor, textColor)
         term.setBackgroundColor(bgColor or colors.blue)
         term.setTextColor(textColor or colors.white)
         term.setCursorPos(x, y)
         term.write(string.rep(" ", width))
         term.setCursorPos(x + math.floor((width - #label) / 2), y + math.floor(height / 2))
         term.write(label)
-    end
+    end,
 
-    function gui.drawWindow(x, y, width, height, title)
+    drawWindow = function(x, y, width, height, title)
         -- Window border
         term.setBackgroundColor(colors.gray)
         for i = y, y + height do
@@ -47,9 +42,9 @@ if not success then
             term.setCursorPos(x + 1, i)
             term.write(string.rep(" ", width - 2))
         end
-    end
+    end,
 
-    function gui.waitForButtonClick(x, y, width, height)
+    waitForButtonClick = function(x, y, width, height)
         while true do
             local event, button, mouseX, mouseY = os.pullEvent("mouse_click")
             if mouseX >= x and mouseX <= (x + width) and mouseY >= y and mouseY <= (y + height) then
@@ -57,7 +52,11 @@ if not success then
             end
         end
     end
-else
+}
+
+-- Try to load external GUI library
+local success, result = pcall(require, "lib/guih")
+if success then
     -- If library loads successfully, use its functions
     gui = result
 end
