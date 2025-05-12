@@ -134,7 +134,8 @@ local function drawDesktop()
         {text = "🌐 Browser", x = 3, y = 3, app = "browser"},
         {text = "💻 Terminal", x = 3, y = 6, app = "terminal"},
         {text = "📁 Files", x = 3, y = 9, app = "files"},
-        {text = "⚙️ Settings", x = 3, y = 12, app = "settings"}
+        {text = "📝 Text", x = 3, y = 12, app = "text"},
+        {text = "⚙️ Settings", x = 3, y = 15, app = "settings"}
     }
     
     for _, icon in ipairs(icons) do
@@ -190,7 +191,8 @@ local function detectClick(x, y)
         {y = 3, app = "browser"},
         {y = 6, app = "terminal"},
         {y = 9, app = "files"},
-        {y = 12, app = "settings"}
+        {y = 12, app = "text"},
+        {y = 15, app = "settings"}
     }
     
     if x >= 3 and x <= 14 then
