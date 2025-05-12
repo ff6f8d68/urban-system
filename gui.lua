@@ -129,10 +129,23 @@ local function drawDesktop()
     term.setBackgroundColor(colors.gray)
     term.clear()
     
-    -- Draw desktop icons
-    gui.drawButton(3, 3, "Terminal", 10, 2, colors.white, colors.black)
-    gui.drawButton(3, 6, "Files", 10, 2, colors.white, colors.black)
-    gui.drawButton(3, 9, "Settings", 10, 2, colors.white, colors.black)
+    -- Draw desktop icons with modern styling
+    local icons = {
+        {text = "🌐 Browser", x = 3, y = 3, app = "browser"},
+        {text = "💻 Terminal", x = 3, y = 6, app = "terminal"},
+        {text = "📁 Files", x = 3, y = 9, app = "files"},
+        {text = "⚙️ Settings", x = 3, y = 12, app = "settings"}
+    }
+    
+    for _, icon in ipairs(icons) do
+        -- Draw icon background
+        term.setBackgroundColor(colors.white)
+        term.setTextColor(colors.black)
+        term.setCursorPos(icon.x, icon.y)
+        term.write(string.rep(" ", 12))
+        term.setCursorPos(icon.x + 1, icon.y)
+        term.write(icon.text)
+    end
 end
 
 -- Application launcher with floating windows
@@ -140,8 +153,8 @@ local function openApp(name)
     local window = {
         x = 5,
         y = 5,
-        width = 40,
-        height = 20,
+        width = 60,  -- Increased width for better visibility
+        height = 30, -- Increased height for better visibility
         title = name
     }
     
@@ -149,7 +162,7 @@ local function openApp(name)
     gui.drawWindow(window.x, window.y, window.width, window.height, window.title)
     
     -- Launch app in the window
-    local appPath = "/spaceos/apps/" .. name:lower() .. "_gui.lua"
+    local appPath = "apps/" .. name:lower() .. "_gui.lua"
     if fs.exists(appPath) then
         -- Create window context
         local appWindow, oldTerm = gui.createWindowContext(window.x, window.y, window.width, window.height)
@@ -166,20 +179,26 @@ local function openApp(name)
         -- Draw error message in window
         term.setCursorPos(window.x + 2, window.y + 2)
         term.setTextColor(colors.red)
-        print("Error: App not found")
+        print("Error: App not found at " .. appPath)
         sleep(2)
     end
 end
 
 -- Click detection
 local function detectClick(x, y)
-    if x >= 3 and x <= 12 then
-        if y >= 3 and y <= 4 then
-            openApp("Terminal")
-        elseif y >= 6 and y <= 7 then
-            openApp("Files")
-        elseif y >= 9 and y <= 10 then
-            openApp("Settings")
+    local icons = {
+        {y = 3, app = "browser"},
+        {y = 6, app = "terminal"},
+        {y = 9, app = "files"},
+        {y = 12, app = "settings"}
+    }
+    
+    if x >= 3 and x <= 14 then
+        for _, icon in ipairs(icons) do
+            if y >= icon.y and y <= icon.y + 1 then
+                openApp(icon.app)
+                return
+            end
         end
     end
 end
