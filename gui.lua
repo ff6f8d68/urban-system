@@ -162,7 +162,7 @@ local function openApp(name)
     gui.drawWindow(window.x, window.y, window.width, window.height, window.title)
     
     -- Launch app in the window
-    local appPath = "apps/" .. name:lower() .. "_gui.lua"
+    local appPath = "spaceos/apps/" .. name:lower() .. "_gui.lua"
     if fs.exists(appPath) then
         -- Create window context
         local appWindow, oldTerm = gui.createWindowContext(window.x, window.y, window.width, window.height)
